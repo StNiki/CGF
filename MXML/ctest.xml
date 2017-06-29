@@ -7,7 +7,7 @@
   <identification>
     <encoding>
       <software>MuseScore 2.1.0</software>
-      <encoding-date>2017-06-21</encoding-date>
+      <encoding-date>2017-06-29</encoding-date>
       <supports element="accidental" type="yes"/>
       <supports element="beam" type="yes"/>
       <supports element="print" attribute="new-page" type="yes" value="yes"/>
@@ -59,7 +59,7 @@
       </score-part>
     </part-list>
   <part id="P1">
-    <measure number="1" width="340.64">
+    <measure number="1" width="357.85">
       <print>
         <system-layout>
           <system-margins>
@@ -84,7 +84,7 @@
           <clef-octave-change>-1</clef-octave-change>
           </clef>
         </attributes>
-      <note default-x="75.17" default-y="-75.00">
+      <note default-x="75.18" default-y="-75.00">
         <pitch>
           <step>E</step>
           <octave>2</octave>
@@ -95,7 +95,7 @@
         <stem>up</stem>
         <beam number="1">begin</beam>
         </note>
-      <note default-x="108.16" default-y="-70.00">
+      <note default-x="110.31" default-y="-70.00">
         <pitch>
           <step>F</step>
           <octave>2</octave>
@@ -106,7 +106,7 @@
         <stem>up</stem>
         <beam number="1">continue</beam>
         </note>
-      <note default-x="141.14" default-y="-65.00">
+      <note default-x="145.44" default-y="-65.00">
         <pitch>
           <step>G</step>
           <octave>2</octave>
@@ -117,7 +117,7 @@
         <stem>up</stem>
         <beam number="1">continue</beam>
         </note>
-      <note default-x="174.12" default-y="-75.00">
+      <note default-x="180.58" default-y="-75.00">
         <pitch>
           <step>E</step>
           <octave>2</octave>
@@ -128,39 +128,7 @@
         <stem>up</stem>
         <beam number="1">end</beam>
         </note>
-      <note default-x="174.12" default-y="-60.00">
-        <chord/>
-        <pitch>
-          <step>A</step>
-          <octave>2</octave>
-          </pitch>
-        <duration>1</duration>
-        <voice>1</voice>
-        <type>eighth</type>
-        <stem>up</stem>
-        </note>
-      <note default-x="174.12" default-y="-45.00">
-        <chord/>
-        <pitch>
-          <step>D</step>
-          <octave>3</octave>
-          </pitch>
-        <duration>1</duration>
-        <voice>1</voice>
-        <type>eighth</type>
-        <stem>up</stem>
-        </note>
-      <note default-x="207.11" default-y="-60.00">
-        <pitch>
-          <step>A</step>
-          <octave>2</octave>
-          </pitch>
-        <duration>1</duration>
-        <voice>1</voice>
-        <type>eighth</type>
-        <stem>up</stem>
-        </note>
-      <note default-x="207.11" default-y="-40.00">
+      <note default-x="180.58" default-y="-40.00">
         <chord/>
         <pitch>
           <step>E</step>
@@ -171,10 +139,41 @@
         <type>eighth</type>
         <stem>up</stem>
         </note>
-      <note default-x="207.11" default-y="-20.00">
+      <note default-x="215.71" default-y="-50.00">
+        <pitch>
+          <step>C</step>
+          <octave>3</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        </note>
+      <note default-x="215.71" default-y="-15.00">
         <chord/>
         <pitch>
-          <step>B</step>
+          <step>C</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        </note>
+      <note default-x="250.85" default-y="-65.00">
+        <pitch>
+          <step>G</step>
+          <octave>2</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>up</stem>
+        </note>
+      <note default-x="250.85" default-y="-30.00">
+        <chord/>
+        <pitch>
+          <step>G</step>
           <octave>3</octave>
           </pitch>
         <duration>1</duration>
@@ -194,42 +193,36 @@
         <voice>1</voice>
         <type>eighth</type>
         </note>
-      <note>
-        <rest/>
-        <duration>1</duration>
-        <voice>1</voice>
-        <type>eighth</type>
-        </note>
       </measure>
-    <measure number="2" width="145.57">
+    <measure number="2" width="142.13">
       <note>
         <rest/>
         <duration>8</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="3" width="145.57">
+    <measure number="3" width="142.13">
       <note>
         <rest/>
         <duration>8</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="4" width="145.57">
+    <measure number="4" width="142.13">
       <note>
         <rest/>
         <duration>8</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="5" width="145.57">
+    <measure number="5" width="142.13">
       <note>
         <rest/>
         <duration>8</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="6" width="154.57">
+    <measure number="6" width="151.13">
       <note>
         <rest/>
         <duration>8</duration>

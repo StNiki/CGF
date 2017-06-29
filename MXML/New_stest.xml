@@ -114,7 +114,7 @@
         <type>eighth</type>
         <stem>up</stem>
         <beam number="1">end</beam>
-        <notations><technical><fingering>4</fingering></technical></notations></note>
+        <notations><technical><fingering>3</fingering></technical></notations></note>
       <note default-x="170.08" default-y="-15.00">
         <pitch>
           <step>C</step>
