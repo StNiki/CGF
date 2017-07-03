@@ -124,7 +124,7 @@ class NoteNode(object):
             self.me = str('{0}: (chord): {1}'.format(self.pitch, self.finger))
 
         else:
-            self.vector = [0,0,0,0,0,0,0,0,0,0] # num of rules
+            self.vector = [0,0,0,0,0,0,0,0,0,0,0] # num of rules
             # normal node with 1 note
             self.pitch, self.fret, self.string, self.finger = self.analyze(notes, finger)
             self.score = 0
@@ -187,10 +187,12 @@ class NoteNode(object):
         if self.fret < 5: # prioritize smaller positions
             #total += -5
             self.vector[5] = 1
-        self.vector[6] = abs(self.position - self.parent.position)
-        self.vector[7] = abs(self.fret - self.parent.fret)
-        self.vector[8] = abs(self.string - self.parent.string)
-        self.vector[9] = abs(self.finger - int(str(self.parent.finger).split(',')[-1]))    
+        if self.finger == 4: # penalize 4
+            self.vector[6] = 1
+        self.vector[7] = abs(self.position - self.parent.position)
+        self.vector[8] = abs(self.fret - self.parent.fret)
+        self.vector[9] = abs(self.string - self.parent.string)
+        self.vector[10] = abs(self.finger - int(str(self.parent.finger).split(',')[-1]))    
         
         return sum(int(a)*int(b) for a,b in zip(self.rules,self.vector))    
             
