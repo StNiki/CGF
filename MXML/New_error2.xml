@@ -5,7 +5,7 @@
   <identification>
     <encoding>
       <software>MuseScore 2.1.0</software>
-      <encoding-date>2017-06-20</encoding-date>
+      <encoding-date>2017-07-09</encoding-date>
       <supports element="accidental" type="yes" />
       <supports element="beam" type="yes" />
       <supports attribute="new-page" element="print" type="yes" value="yes" />
@@ -57,7 +57,7 @@
       </score-part>
     </part-list>
   <part id="P1">
-    <measure number="1" width="329.85">
+    <measure number="1" width="356.33">
       <print>
         <system-layout>
           <system-margins>
@@ -93,7 +93,7 @@
         <stem>up</stem>
         <beam number="1">begin</beam>
         <notations><technical><fingering>0</fingering></technical></notations></note>
-      <note default-x="106.81" default-y="-70.00">
+      <note default-x="110.12" default-y="-70.00">
         <pitch>
           <step>F</step>
           <octave>2</octave>
@@ -104,7 +104,20 @@
         <stem>up</stem>
         <beam number="1">continue</beam>
         <notations><technical><fingering>1</fingering></technical></notations></note>
-      <note default-x="138.44" default-y="-65.00">
+      <note default-x="145.06" default-y="-70.00">
+        <pitch>
+          <step>F</step>
+          <alter>1</alter>
+          <octave>2</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <accidental>sharp</accidental>
+        <stem>up</stem>
+        <beam number="1">continue</beam>
+        <notations><technical><fingering>2</fingering></technical></notations></note>
+      <note default-x="180.01" default-y="-65.00">
         <pitch>
           <step>G</step>
           <octave>2</octave>
@@ -114,35 +127,17 @@
         <type>eighth</type>
         <stem>up</stem>
         <beam number="1">end</beam>
-        <notations><technical><fingering>4</fingering></technical></notations></note>
-      <note default-x="170.08" default-y="-15.00">
+        <notations><technical><fingering>3</fingering></technical></notations></note>
+      <note default-x="214.95" default-y="-65.00">
         <pitch>
-          <step>C</step>
-          <octave>4</octave>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>2</octave>
           </pitch>
         <duration>1</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <stem>down</stem>
-        <notations><technical><fingering>1</fingering></technical></notations></note>
-      <note default-x="201.71" default-y="-20.00">
-        <pitch>
-          <step>B</step>
-          <octave>3</octave>
-          </pitch>
-        <duration>1</duration>
-        <voice>1</voice>
-        <type>eighth</type>
-        <stem>down</stem>
-        <notations><technical><fingering>0</fingering></technical></notations></note>
-      <note default-x="233.34" default-y="-25.00">
-        <pitch>
-          <step>A</step>
-          <octave>3</octave>
-          </pitch>
-        <duration>1</duration>
-        <voice>1</voice>
-        <type>eighth</type>
+        <accidental>sharp</accidental>
         <stem>up</stem>
         <notations><technical><fingering>4</fingering></technical></notations></note>
       <note>
@@ -157,36 +152,42 @@
         <voice>1</voice>
         <type>eighth</type>
         </note>
+      <note>
+        <rest />
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        </note>
       </measure>
-    <measure number="2" width="147.73">
+    <measure number="2" width="142.43">
       <note>
         <rest />
         <duration>8</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="3" width="147.73">
+    <measure number="3" width="142.43">
       <note>
         <rest />
         <duration>8</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="4" width="147.73">
+    <measure number="4" width="142.43">
       <note>
         <rest />
         <duration>8</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="5" width="147.73">
+    <measure number="5" width="142.43">
       <note>
         <rest />
         <duration>8</duration>
         <voice>1</voice>
         </note>
       </measure>
-    <measure number="6" width="156.73">
+    <measure number="6" width="151.43">
       <note>
         <rest />
         <duration>8</duration>
