@@ -116,7 +116,7 @@
         <accidental>sharp</accidental>
         <stem>up</stem>
         <beam number="1">continue</beam>
-        <notations><technical><fingering>2</fingering></technical></notations></note>
+        <notations><technical><fingering>1</fingering></technical></notations></note>
       <note default-x="204.26" default-y="-65.00">
         <pitch>
           <step>G</step>
@@ -127,7 +127,7 @@
         <type>eighth</type>
         <stem>up</stem>
         <beam number="1">end</beam>
-        <notations><technical><fingering>3</fingering></technical></notations></note>
+        <notations><technical><fingering>2</fingering></technical></notations></note>
       <note default-x="247.29" default-y="-65.00">
         <pitch>
           <step>G</step>
@@ -140,7 +140,7 @@
         <accidental>sharp</accidental>
         <stem>up</stem>
         <beam number="1">begin</beam>
-        <notations><technical><fingering>4</fingering></technical></notations></note>
+        <notations><technical><fingering>1</fingering></technical></notations></note>
       <note default-x="290.32" default-y="-60.00">
         <pitch>
           <step>A</step>
@@ -151,7 +151,7 @@
         <type>eighth</type>
         <stem>up</stem>
         <beam number="1">continue</beam>
-        <notations><technical><fingering>0</fingering></technical></notations></note>
+        <notations><technical><fingering>2</fingering></technical></notations></note>
       <note default-x="333.35" default-y="-60.00">
         <pitch>
           <step>A</step>
@@ -164,7 +164,7 @@
         <accidental>sharp</accidental>
         <stem>up</stem>
         <beam number="1">continue</beam>
-        <notations><technical><fingering>1</fingering></technical></notations></note>
+        <notations><technical><fingering>3</fingering></technical></notations></note>
       <note default-x="376.38" default-y="-55.00">
         <pitch>
           <step>B</step>
@@ -175,7 +175,7 @@
         <type>eighth</type>
         <stem>up</stem>
         <beam number="1">end</beam>
-        <notations><technical><fingering>2</fingering></technical></notations></note>
+        <notations><technical><fingering>1</fingering></technical></notations></note>
       </measure>
     <measure number="2" width="330.23">
       <note default-x="12.00" default-y="-50.00">
@@ -188,7 +188,7 @@
         <type>eighth</type>
         <stem>up</stem>
         <beam number="1">begin</beam>
-        <notations><technical><fingering>3</fingering></technical></notations></note>
+        <notations><technical><fingering>2</fingering></technical></notations></note>
       <note default-x="51.58" default-y="-50.00">
         <pitch>
           <step>C</step>
@@ -201,7 +201,7 @@
         <accidental>sharp</accidental>
         <stem>up</stem>
         <beam number="1">continue</beam>
-        <notations><technical><fingering>4</fingering></technical></notations></note>
+        <notations><technical><fingering>1</fingering></technical></notations></note>
       <note default-x="91.16" default-y="-45.00">
         <pitch>
           <step>D</step>
@@ -212,7 +212,7 @@
         <type>eighth</type>
         <stem>up</stem>
         <beam number="1">continue</beam>
-        <notations><technical><fingering>0</fingering></technical></notations></note>
+        <notations><technical><fingering>2</fingering></technical></notations></note>
       <note default-x="130.74" default-y="-45.00">
         <pitch>
           <step>D</step>
@@ -225,7 +225,7 @@
         <accidental>sharp</accidental>
         <stem>up</stem>
         <beam number="1">end</beam>
-        <notations><technical><fingering>1</fingering></technical></notations></note>
+        <notations><technical><fingering>3</fingering></technical></notations></note>
       <note default-x="170.32" default-y="-40.00">
         <pitch>
           <step>E</step>
@@ -236,7 +236,7 @@
         <type>eighth</type>
         <stem>up</stem>
         <beam number="1">begin</beam>
-        <notations><technical><fingering>2</fingering></technical></notations></note>
+        <notations><technical><fingering>1</fingering></technical></notations></note>
       <note default-x="209.90" default-y="-35.00">
         <pitch>
           <step>F</step>
@@ -247,7 +247,7 @@
         <type>eighth</type>
         <stem>up</stem>
         <beam number="1">continue</beam>
-        <notations><technical><fingering>3</fingering></technical></notations></note>
+        <notations><technical><fingering>2</fingering></technical></notations></note>
       <note default-x="249.48" default-y="-35.00">
         <pitch>
           <step>F</step>
@@ -260,7 +260,7 @@
         <accidental>sharp</accidental>
         <stem>up</stem>
         <beam number="1">continue</beam>
-        <notations><technical><fingering>4</fingering></technical></notations></note>
+        <notations><technical><fingering>1</fingering></technical></notations></note>
       <note default-x="289.06" default-y="-30.00">
         <pitch>
           <step>G</step>
@@ -271,7 +271,7 @@
         <type>eighth</type>
         <stem>up</stem>
         <beam number="1">end</beam>
-        <notations><technical><fingering>0</fingering></technical></notations></note>
+        <notations><technical><fingering>2</fingering></technical></notations></note>
       </measure>
     <measure number="3" width="326.25">
       <note default-x="18.42" default-y="-30.00">
@@ -286,7 +286,7 @@
         <accidental>sharp</accidental>
         <stem>up</stem>
         <beam number="1">begin</beam>
-        <notations><technical><fingering>1</fingering></technical></notations></note>
+        <notations><technical><fingering>3</fingering></technical></notations></note>
       <note default-x="56.69" default-y="-25.00">
         <pitch>
           <step>A</step>
@@ -297,7 +297,7 @@
         <type>eighth</type>
         <stem>up</stem>
         <beam number="1">continue</beam>
-        <notations><technical><fingering>2</fingering></technical></notations></note>
+        <notations><technical><fingering>1</fingering></technical></notations></note>
       <note default-x="94.97" default-y="-25.00">
         <pitch>
           <step>A</step>
@@ -310,7 +310,7 @@
         <accidental>sharp</accidental>
         <stem>up</stem>
         <beam number="1">continue</beam>
-        <notations><technical><fingering>3</fingering></technical></notations></note>
+        <notations><technical><fingering>2</fingering></technical></notations></note>
       <note default-x="133.25" default-y="-20.00">
         <pitch>
           <step>B</step>
@@ -321,7 +321,7 @@
         <type>eighth</type>
         <stem>up</stem>
         <beam number="1">end</beam>
-        <notations><technical><fingering>0</fingering></technical></notations></note>
+        <notations><technical><fingering>3</fingering></technical></notations></note>
       <note default-x="171.53" default-y="-15.00">
         <pitch>
           <step>C</step>
@@ -391,7 +391,7 @@
         <type>eighth</type>
         <stem>down</stem>
         <beam number="1">begin</beam>
-        <notations><technical><fingering>0</fingering></technical></notations></note>
+        <notations><technical><fingering>1</fingering></technical></notations></note>
       <note default-x="98.64" default-y="0.00">
         <pitch>
           <step>F</step>
@@ -402,7 +402,7 @@
         <type>eighth</type>
         <stem>down</stem>
         <beam number="1">continue</beam>
-        <notations><technical><fingering>1</fingering></technical></notations></note>
+        <notations><technical><fingering>2</fingering></technical></notations></note>
       <note default-x="148.21" default-y="0.00">
         <pitch>
           <step>F</step>
@@ -415,7 +415,7 @@
         <accidental>sharp</accidental>
         <stem>down</stem>
         <beam number="1">continue</beam>
-        <notations><technical><fingering>2</fingering></technical></notations></note>
+        <notations><technical><fingering>3</fingering></technical></notations></note>
       <note default-x="197.77" default-y="5.00">
         <pitch>
           <step>G</step>
@@ -426,7 +426,7 @@
         <type>eighth</type>
         <stem>down</stem>
         <beam number="1">end</beam>
-        <notations><technical><fingering>3</fingering></technical></notations></note>
+        <notations><technical><fingering>1</fingering></technical></notations></note>
       <note default-x="247.34" default-y="5.00">
         <pitch>
           <step>G</step>
@@ -450,7 +450,7 @@
         <type>eighth</type>
         <stem>down</stem>
         <beam number="1">continue</beam>
-        <notations><technical><fingering>3</fingering></technical></notations></note>
+        <notations><technical><fingering>1</fingering></technical></notations></note>
       <note default-x="346.47" default-y="10.00">
         <pitch>
           <step>A</step>
@@ -487,7 +487,7 @@
         <type>eighth</type>
         <stem>down</stem>
         <beam number="1">begin</beam>
-        <notations><technical><fingering>4</fingering></technical></notations></note>
+        <notations><technical><fingering>1</fingering></technical></notations></note>
       <note default-x="68.97" default-y="20.00">
         <pitch>
           <step>C</step>
@@ -545,7 +545,7 @@
         <voice>1</voice>
         <type>half</type>
         <stem>up</stem>
-        <notations><technical><fingering>2</fingering></technical></notations></note>
+        <notations><technical><fingering>3</fingering></technical></notations></note>
       </measure>
     <measure number="6" width="263.46">
       <note>
