@@ -134,7 +134,7 @@
         <voice>1</voice>
         <type>eighth</type>
         <stem>down</stem>
-        <notations><technical><fingering>4</fingering></technical></notations></note>
+        <notations><technical><fingering>0</fingering></technical></notations></note>
       <note default-x="233.34" default-y="-25.00">
         <pitch>
           <step>A</step>
