@@ -576,4 +576,264 @@ class NoteTree(object):
         return self.get_alter(note) != None
 
 # ============================= ============================= ============================= #
-# ============================= ============================= ============================= #  
+# ============================= ============================= ============================= #
+
+from tkinter import *
+from tkinter import messagebox
+from tkinter.tix import *
+from Classes import *
+from Options import *
+from Rules import *
+import os.path
+
+class GUI():
+
+    def __init__(self, master):        
+        # init frame
+        self.rules = rules
+        self.master = master
+        self.master.geometry('600x300')
+        self.master.title('Computing Fingerings')
+        swin = ScrolledWindow(self.master, scrollbar=Y, width=600 , height=300)
+        swin.pack()
+        self.win = swin.window
+        
+        
+        self.frame = Frame(self.win, cursor='cross', relief=SUNKEN, bg="light blue")
+        self.frame.pack(side = LEFT, fill = BOTH, expand = True, padx = 10, pady = 10)
+        
+        # string variables
+        self.file = StringVar()
+        self.file.set("sTest.xml")
+        self.choice = StringVar()
+        self.created = StringVar()
+        self.prints = StringVar()
+        
+        # file entry
+        self.entry = Entry(self.frame, textvariable=self.file, font='Helvetica 10 italic', justify='center', width=40)
+        self.entry.pack(ipady=3)
+        self.entry.bind('<Leave>' ,self.setfile)
+        
+        # validate message
+        self.val_msg = Message(self.frame, textvariable=self.choice, font='Helvetica 10', justify='center', width=400)
+        self.val_msg.pack(ipady=3)
+        
+        # button frame
+        #self.but_frame = Frame(self.frame, pady=10, padx=10, cursor='cross', relief=SUNKEN, bg="light blue")
+        #self.but_frame.place(in_=self.frame, anchor="c", relx=.5, rely=.5)
+        
+        # show rules button
+        self.create = Button(self.frame, text="SHOW RULES", fg="brown", font='Helvetica 10 bold', command=self.showrules)
+        self.create.pack(ipady=3) 
+        
+        self.ruleset = Button(self.frame, text="CUSTOMIZE RULES", fg="brown", font='Helvetica 10 bold', command=self.setrules)
+        self.ruleset.pack(ipady=3)
+        
+        # create Tree button
+        self.create = Button(self.frame, text="COMPUTE FINGERINGS", fg="brown", font='Helvetica 10 bold', command=self.createTree)
+        self.create.pack(ipady=3)           
+        
+        # prints display message
+        self.res_msg = Message(self.frame, textvariable=self.prints, font='Helvetica 10', justify='center', width=560)
+        self.res_msg.pack(ipady=3) 
+        
+        # created message entry
+        self.val = Entry(self.frame, textvariable=self.created, font='Helvetica 10', justify='center', width=40)
+        self.val.pack(ipady=3)     
+        
+        # quit button
+        self.quit = Button(self.frame, text="QUIT", font='Helvetica 10 bold', fg="brown", command=self.frame.quit)
+        self.quit.pack(ipady=3)     
+        
+    def getR(self, rules):
+        r = ''
+        r = r.join(i+'\n' for i in str(rules).split())
+        r = r.replace(']','')
+        r = r.replace('[','')
+        r = r.replace(',','')
+        return r
+        
+    def setfile(self, event):
+        self.choice.set("Compute fingerings for: {0} ?".format(self.file.get()))
+    
+    def showrules(self):
+        #messagebox.showinfo("Rules", self.rules)
+        t = Toplevel(self.master)
+        t.wm_title('Scoring Rules')
+        t.geometry('250x230')
+        t.resizable(width=False, height=False)
+        swin = ScrolledWindow(t, scrollbar=Y, width=250 , height=230)
+        swin.pack()
+        win = swin.window
+        f = Frame(win, bg='light blue', relief=SUNKEN)
+        f.pack(fill = BOTH, expand = True, padx = 5, pady = 5)
+        
+        msg = Message(f, text=self.getR(self.rules), font='Helvetica 10', justify='center', width=30)
+        msg.pack(ipady=3)
+        
+        q = Button(f, text="CLOSE", fg="brown", font='Helvetica 10 bold', command=t.destroy)
+        q.pack(ipady=3)        
+        
+    def setrules(self):
+        t = Toplevel(self.master)
+        t.wm_title('Customize Rules Weights')
+        t.geometry('350x400')
+        t.resizable(width=False, height=False)
+        swin = ScrolledWindow(t, scrollbar=Y, width=350 , height=400)
+        swin.pack()
+        win = swin.window
+        f = Frame(win, bg='light blue', relief=SUNKEN)
+        f.pack(fill = BOTH, expand = True, padx = 5, pady = 5)
+        
+        # add message
+        m1 = StringVar()
+        m2 = StringVar()
+        m3 = StringVar()
+        m4 = StringVar()
+        m5 = StringVar()
+        m6 = StringVar()
+        m7 = StringVar()
+        m8 = StringVar()
+        m9 = StringVar()
+        m10 = StringVar()
+        m11 = StringVar()
+        m12 = StringVar()
+        m1.set('Penalize position change weight')
+        m2.set('Prioritize same finger-position weight')
+        m3.set('Prioritize open position weight')
+        m4.set('Penalize consecutive same finger weight')
+        m5.set('Favor consecutive same note-finger usage')
+        m6.set('Favor bigger finger numbers weight')
+        m7.set('Favor smaller position numbers weight')
+        m8.set('Penalize 4th finger')
+        m9.set('Position difference')
+        m10.set('Fret distance')
+        m11.set('String difference')
+        m12.set('Finger distance')
+        
+        #add frame
+        f1 = Frame(f, bg='light blue', relief=SUNKEN)
+        f1.pack(fill = BOTH, expand = True, padx = 3, pady = 3)
+        f2 = Frame(f, bg='light blue', relief=SUNKEN)
+        f2.pack(fill = BOTH, expand = True, padx = 3, pady = 3)        
+        f3 = Frame(f, bg='light blue', relief=SUNKEN)
+        f3.pack(fill = BOTH, expand = True, padx = 3, pady = 3)        
+        f4 = Frame(f, bg='light blue', relief=SUNKEN)
+        f4.pack(fill = BOTH, expand = True, padx = 3, pady = 3)
+        f5 = Frame(f, bg='light blue', relief=SUNKEN)
+        f5.pack(fill = BOTH, expand = True, padx = 3, pady = 3)
+        f6 = Frame(f, bg='light blue', relief=SUNKEN)
+        f6.pack(fill = BOTH, expand = True, padx = 3, pady = 3)
+        f7 = Frame(f, bg='light blue', relief=SUNKEN)
+        f7.pack(fill = BOTH, expand = True, padx = 3, pady = 3)
+        f8 = Frame(f, bg='light blue', relief=SUNKEN)
+        f8.pack(fill = BOTH, expand = True, padx = 3, pady = 3)
+        f9 = Frame(f, bg='light blue', relief=SUNKEN)
+        f9.pack(fill = BOTH, expand = True, padx = 3, pady = 3)
+        f10 = Frame(f, bg='light blue', relief=SUNKEN)
+        f10.pack(fill = BOTH, expand = True, padx = 3, pady = 3)
+        f11 = Frame(f, bg='light blue', relief=SUNKEN)
+        f11.pack(fill = BOTH, expand = True, padx = 3, pady = 3)
+        f12 = Frame(f, bg='light blue', relief=SUNKEN)
+        f12.pack(fill = BOTH, expand = True, padx = 3, pady = 3)        
+        
+        # show message
+        msg1 = Message(f1, textvariable=m1, font='Helvetica 10', justify='center', width=500)
+        msg1.pack(side=LEFT, ipady=3)
+        msg2 = Message(f2, textvariable=m2, font='Helvetica 10', justify='center', width=500)
+        msg2.pack(side=LEFT, ipady=3)
+        msg3 = Message(f3, textvariable=m3, font='Helvetica 10', justify='center', width=500)
+        msg3.pack(side=LEFT, ipady=3)
+        msg4 = Message(f4, textvariable=m4, font='Helvetica 10', justify='center', width=500)
+        msg4.pack(side=LEFT, ipady=3)
+        msg5 = Message(f5, textvariable=m5, font='Helvetica 10', justify='center', width=500)
+        msg5.pack(side=LEFT, ipady=3)
+        msg6 = Message(f6, textvariable=m6, font='Helvetica 10', justify='center', width=500)
+        msg6.pack(side=LEFT, ipady=3)
+        msg7 = Message(f7, textvariable=m7, font='Helvetica 10', justify='center', width=500)   
+        msg7.pack(side=LEFT, ipady=3)
+        msg8 = Message(f8, textvariable=m8, font='Helvetica 10', justify='center', width=500)   
+        msg8.pack(side=LEFT, ipady=3)
+        msg9 = Message(f9, textvariable=m9, font='Helvetica 10', justify='center', width=500)  
+        msg9.pack(side=LEFT, ipady=3)
+        msg10 = Message(f10, textvariable=m10, font='Helvetica 10', justify='center', width=500)  
+        msg10.pack(side=LEFT, ipady=3)
+        msg11 = Message(f11, textvariable=m10, font='Helvetica 10', justify='center', width=500)  
+        msg11.pack(side=LEFT, ipady=3)
+        msg12 = Message(f11, textvariable=m10, font='Helvetica 10', justify='center', width=500)
+        msg12.pack(side=LEFT, ipady=3)
+        
+        # add entry
+        self.e1 = Entry(f1, font='Helvetica 10 italic', justify='center', width=10)
+        self.e1.pack(side=RIGHT, ipady=3)
+        self.e2 = Entry(f2, font='Helvetica 10 italic', justify='center', width=10)
+        self.e2.pack(side=RIGHT, ipady=3)
+        self.e3 = Entry(f3, font='Helvetica 10 italic', justify='center', width=10)
+        self.e3.pack(side=RIGHT, ipady=3)
+        self.e4 = Entry(f4, font='Helvetica 10 italic', justify='center', width=10)
+        self.e4.pack(side=RIGHT, ipady=3)
+        self.e5 = Entry(f5, font='Helvetica 10 italic', justify='center', width=10)
+        self.e5.pack(side=RIGHT, ipady=3)
+        self.e6 = Entry(f6, font='Helvetica 10 italic', justify='center', width=10)
+        self.e6.pack(side=RIGHT, ipady=3)
+        self.e7 = Entry(f7, font='Helvetica 10 italic', justify='center', width=10)
+        self.e7.pack(side=RIGHT, ipady=3)
+        self.e8 = Entry(f8, font='Helvetica 10 italic', justify='center', width=10)
+        self.e8.pack(side=RIGHT, ipady=3)
+        self.e9 = Entry(f9, font='Helvetica 10 italic', justify='center', width=10)
+        self.e9.pack(side=RIGHT, ipady=3)
+        self.e10 = Entry(f10, font='Helvetica 10 italic', justify='center', width=10)
+        self.e10.pack(side=RIGHT, ipady=3)
+        self.e11 = Entry(f11, font='Helvetica 10 italic', justify='center', width=10)
+        self.e11.pack(side=RIGHT, ipady=3)
+        self.e12 = Entry(f12, font='Helvetica 10 italic', justify='center', width=10)
+        self.e12.pack(side=RIGHT, ipady=3)
+
+        s = Button(f, text="SET WEIGHTS", fg="brown", font='Helvetica 10 bold', command=self.setR)
+        s.pack(ipady=3)
+        
+        r = Button(f, text="RESTORE DEFAULT", fg="brown", font='Helvetica 10 bold', command=self.setD)
+        r.pack(ipady=3)
+        
+        q = Button(f, text="CLOSE", fg="brown", font='Helvetica 10 bold', command=t.destroy)
+        q.pack(ipady=3)
+    
+    def setR(self):
+        new_rules = 'rules = [{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}]'.format(self.e1.get() or 0,self.e2.get() or 0,self.e3.get() or 0,
+                                                               self.e4.get() or 0,self.e5.get() or 0,self.e6.get() or 0, 
+                                                        self.e7.get() or 0, self.e8.get() or 0, self.e9.get() or 0,self.e10.get() or 0,
+                                                                    self.e11.get() or 0, self.e12.get() or 0)
+        file = open('Rules.py','w')
+        file.write(new_rules)
+        new_rules = new_rules.replace("rules = ",'')
+        new_rules = new_rules.replace("]",'')
+        new_rules = new_rules.replace(",",'')
+        new_rules = new_rules.replace("[",'')
+        self.rules = list(new_rules.split())
+        #print(self.rules)
+      
+    def setD(self):
+        # INITIAL: rules = [10, -10, -20, 10, -5, -5, 0, 0, 0, 0]
+        new_rules = 'rules = [10, -10, -20, 10, -10, -5, -5, 5, 0, 0, 0, 0]'
+        file = open('Rules.py','w')
+        file.write(new_rules)
+        new_rules = new_rules.replace("rules = ",'')
+        new_rules = new_rules.replace("]",'')
+        new_rules = new_rules.replace(",",'')
+        new_rules = new_rules.replace("[",'')
+        self.rules = list(new_rules.split())
+        messagebox.showinfo("Rules", 'Weight restored')
+    
+    def createTree(self):
+        if os.path.isfile(self.file.get()):
+            tree = NoteTree(self.file.get(), list(self.rules))
+            self.prints.set(tree.prints)
+            self.created.set('Created {0}'.format(tree.new_file))
+        else:
+            self.created.set('Please enter a valid MusicXML file.')
+
+root = Tk()
+root.resizable(width=False, height=False)
+gui = GUI(root)
+root.mainloop() #runs until quit or closed
+root.destroy() #cannot invoke, application is destroyed
