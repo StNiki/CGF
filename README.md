@@ -1,7 +1,5 @@
 ## Computing Guitar Fingerings
-##### Niki Stavropoulou
-##### University of Edinburgh
-##### MSc Dissertation, 2017
+##### Niki Stavropoulou, MSc Dissertation, University of Edinburgh, 2017
 
 >A framework that can generate left hand guitar fingerings given the notes of a music score in **MusicXML**. Applies a set
 of heuristics rules to evaluate the playability of the generated fingerings and outputs a new file with the best scoring ones.
