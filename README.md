@@ -35,7 +35,7 @@ If the w, l, p options are omitted the program will use the default configuratio
 
 Running the GUI script will open the default window where the user has the following options:
 
-- Type in the textbox the MusicXML file to be parsed. 
+- Type in the *textbox* the MusicXML file to be parsed. 
 If the file does not exist or is invalid, a message will notify the user.
 
 - Use the button **SHOW RULES** to view the rule set used in the framework. 
