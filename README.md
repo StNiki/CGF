@@ -38,17 +38,17 @@ Running the GUI script will open the default window where the user has the follo
 - Type in the textbox the MusicXML file to be parsed. 
 If the file does not exist or is invalid, a message will notify the user.
 
-- Use the button SHOW RULES to view the rule set used in the framework. 
+- Use the button **SHOW RULES** to view the rule set used in the framework. 
 This open a new window that shows only the human description of the rules, not the condition to which they translate.
 
-- Use the CUSTOMIZE RULES button to set the rule weights. 
+- Use the **CUSTOMIZE RULES** button to set the rule weights. 
 This opens a new window where the user can type next to the shown rules the desired weight.
 Once finished the user can click SET and CLOSE.
 
-- Use the button CHANGE CONFIGURATION to set the pruning and system parameters.
+- Use the button **CHANGE CONFIGURATION** to set the pruning and system parameters.
 This opens a new window where the user can type the width limit, notes per layer reset or choose the print option in the corresponding textbox.
 Once finished the user can click SET and CLOSE.
 
-- Use the button COMPUTE FINGERINGS to compute the fingerings for the selected file with the set parameters. If successful, there will be an output message with the new file that was created.
+- Use the button **COMPUTE FINGERINGS** to compute the fingerings for the selected file with the set parameters. If successful, there will be an output message with the new file that was created.
 
-- Use QUIT to exit.
+- Use **QUIT** to exit.
