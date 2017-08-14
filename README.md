@@ -1,4 +1,6 @@
-!! Still known issues with writing tabs. Working on it. Shell scripts inc.
+!! Shell scripts inc.
+
+!! Still known issues with writing tabs. Working on it.
 
 To compute the fingerings for a music file in MusicXML the user can either run the GUI.sh or the CGF.sh script. 
 
