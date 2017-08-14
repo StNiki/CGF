@@ -2,6 +2,7 @@ import xml.etree.ElementTree as ET
 from xml.dom.minidom import parse, parseString
 from Options import *
 from time import sleep
+from collections import OrderedDict
 import gc
 import os.path
 import sys
@@ -10,13 +11,17 @@ import sys
 # ============================= ============================= ============================= #  
 class Note(object):
     # ============================= ============================= #
-    def __init__(self, pitch, octave, duration=None, x=None):
+    def __init__(self, pitch, octave, voice=None, duration=None, x=None, y=None, measure=0):
         self.pitch = pitch
         self.octave = octave
-        self.me = str('{0}-{1}'.format(self.pitch,self.octave))
-        self.fingers = None
-        self.duration = duration
+        self.voice = voice
         self.x = x
+        self.y = y
+        self.duration = duration
+        self.measure = measure
+        self.me = str('{0}-{1}'.format(self.pitch, self.octave))
+        self.xy = str('{0}-{1}({2}: {3} {4})'.format(self.pitch, self.octave, self.measure, self.x, self.y))
+        self.fingers = None
     
     def setFingers(self, fingers):
         self.fingers = fingers
@@ -33,10 +38,63 @@ class Note(object):
     def getFingers(self):
         return self.fingers
     
+    def getVoice(self):
+        return self.voice
+    
     # show pitch, octave, possible fingerings
     def getNoteInfo(self):
-        return ('Note {0} of octave {1} playable at fret-string-finger combination(s): {2}'.format(self.pitch,self.octave,self.fingers))
+        return ('Note {0} of octave {1} playable at fret-string-finger combination(s): {2}'.format(self.pitch, self.octave, self.fingers))
 
+    # ============================= ============================= #
+    # overrides 
+    def __eq__(self, other):
+        if isinstance(other, Note):
+            return (self.pitch == other.pitch) and (self.octave == other.octave)
+        else:
+            return NotImplemented
+        
+    def __ne__(self, other):
+        res = self.__eq__(other)
+        if res is NotImplemented:
+            return res
+        return not res
+
+    def __lt__(self, other):
+        if isinstance(other, Note):
+            if float(self.measure) == float(other.measure):
+                return float(self.x) < float(other.x)
+            else:
+                return float(self.measure) < float(other.measure)
+        else:
+            return NotImplemented
+        
+    def __rt__(self, other):
+        if isinstance(other, Note):
+            if float(self.measure) == float(other.measure):
+                return float(self.x) > float(other.x)
+            else:
+                return float(self.measure) > float(other.measure)
+        else:
+            return NotImplemented
+        
+    def __le__(self, other):
+        if isinstance(other, Note):
+            if float(self.measure) == float(other.measure):
+                return float(self.x) <= float(other.x)
+            else:
+                return float(self.measure) <= float(other.measure)
+        else:
+            return NotImplemented
+        
+    def __re__(self, other):
+        if isinstance(other, Note):
+            if float(self.measure) == float(other.measure):
+                return float(self.x) >= float(other.x)
+            else:
+                return float(self.measure) >= float(other.measure)
+        else:
+            return NotImplemented
+    
 # ============================= ============================= ============================= # 
 # ============================= ============================= ============================= #  
 class Chord(object):
@@ -55,7 +113,7 @@ class Chord(object):
 # ============================= ============================= ============================= #           
 class NoteNode(object):
     # ============================= ============================= #
-    def __init__(self, notes, rules, isChord=False, finger=None, parent=None):
+    def __init__(self, notes, rules, isChord=False, finger=None, parent=None, fromChord=False):
         self.rules = rules
         if isChord:
             # create nodes for each note in chord, get score and best fignering and keep it as a whole
@@ -66,11 +124,11 @@ class NoteNode(object):
             if len(notes[0].fingers.split(','))>1:
                 for finger in notes[0].fingers.split(','):
                     node = NoteNode(notes[0], rules, False, finger, parent)
-                    node.resetScore()
+                    #node.resetScore()
                     chords.append(node)
             else:
                 node = NoteNode(notes[0], rules, False, notes[0].fingers, parent)
-                node.resetScore()
+                #node.resetScore()
                 chords.append(node)    
             for note in notes[1:]:
                 c = 0
@@ -79,12 +137,12 @@ class NoteNode(object):
                     if len(note.fingers.split(','))>1:
                         for finger in note.fingers.split(','):
                             if ((finger != ch_finger) or (ch_finger==0)):
-                                node = NoteNode(note, rules, False, finger, child)
+                                node = NoteNode(note, rules, False, finger, child, fromChord=True)
                                 chords.append(node)
                                 c += 1
                     else:
                         if ((note.fingers != ch_finger) or (ch_finger==0)):
-                            node = NoteNode(note, rules, False, note.fingers, child)
+                            node = NoteNode(note, rules, False, note.fingers, child, fromChord=True) 
                             chords.append(node)
                             c += 1
                 i = c
@@ -96,17 +154,19 @@ class NoteNode(object):
             start = min(scores, key=scores.get)
             best_pitch = ''
             best_fingers = ''
+            best_comb = ''
             for note in notes:
                 while not start.equals(notes[0]): 
                     best_path.insert(0, start)
                     best_pitch = start.pitch + ',' + best_pitch
                     best_fingers = str(start.finger) + ',' + best_fingers
+                    best_comb = '({0},{1})'.format(str(start.fret),str(start.string))+ ' ' + best_comb
                     start = start.parent
             # last note 
             best_path.insert(0, start)
             best_pitch = start.pitch + ',' + best_pitch
             best_fingers = str(start.finger) + ',' + best_fingers
-            
+            best_comb = '({0},{1})'.format(str(start.fret),str(start.string))+ ' ' + best_comb
             # got best chord fingerings, now fill the rest 
             self.pitch = best_pitch[:-1]
             self.fret = chords_leafs[-1].fret
@@ -115,16 +175,19 @@ class NoteNode(object):
             self.children = list()
             self.octave = chords_leafs[-1].octave
             self.position = chords_leafs[-1].position
+            self.note = notes
             if parent:
                 self.parent = parent
                 self.parent.addChild(self)
             else:
                 self.parent = self
-            self.score = chords_leafs[-1].score + self.parent.score
-            self.me = str('{0}: (chord): {1}'.format(self.pitch, self.finger))
-
+            self.score = self.parent.score #+ chords_leafs[-1].score  
+            #self.me = str('{0}: {1}: {2}'.format(self.pitch, best_comb[:-1], self.finger))
+            self.me = best_comb[:-1]
         else:
-            self.vector = [0,0,0,0,0,0,0,0,0,0,0] # num of rules
+            self.fromChord = fromChord
+            self.note = notes
+            self.vector = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0] # num of rules
             # normal node with 1 note
             self.pitch, self.fret, self.string, self.finger = self.analyze(notes, finger)
             self.score = 0
@@ -136,7 +199,8 @@ class NoteNode(object):
                 self.parent.addChild(self)
             else:
                 self.parent = self
-            self.me = str('{0}-{1}: ({2}/{3}): {4}'.format(self.pitch, self.octave, self.fret, self.string, self.finger))
+            #self.me = str('{0}-{1}: ({2}/{3}): {4}'.format(self.pitch, self.octave, self.fret, self.string, self.finger))
+            self.me = '({0},{1})'.format(self.fret,self.string)
             self.score = self._score() + self.parent.score
             
     # ============================= ============================= #
@@ -166,33 +230,38 @@ class NoteNode(object):
         # calculate score
         # the bigger the score the worse the fingering
         #total = 0
-        if self.position != self.parent.position: # penalize position change
-            if self.position != 0:
-                #total += 10
-                self.vector[0] = 1
-        if self.position == self.finger: # prioritize finger-position
+        if self.position == self.parent.position: # favor no position change
+            self.vector[0] = 1
+        if (self.fret-self.position)+1 == self.finger: # prioritize finger-position
             #total += -10
             self.vector[1] = 1
         if self.fret == 0: # prioritize 0
             #total += -20
             self.vector[2] = 1
-        if self.finger == int(str(self.parent.finger).split(',')[-1]): # fingers should be different
-            if self.finger != 0:
-                #total += 10
-                self.vector[3] = 1
+        if (self.finger != 0) and (self.finger == int(str(self.parent.finger).split(',')[-1])): # fingers should be different
+            #total += 10
+            self.vector[3] = 1
+        if (self.equals(self.parent)) and (self.finger == self.parent.finger): # same finger on holds
+            self.vector[4] = 1
         if self.finger < int(str(self.parent.finger).split(',')[-1]): # higher fingers first
-            if self.parent.finger != 0:
-                #total += -5
-                self.vector[4] = 1
-        if self.fret < 5: # prioritize smaller positions
-            #total += -5
             self.vector[5] = 1
-        if self.finger == 4: # penalize 4
+        if self.position <= 5: # prioritize smaller positions
+            #total += -5
             self.vector[6] = 1
-        self.vector[7] = abs(self.position - self.parent.position)
-        self.vector[8] = abs(self.fret - self.parent.fret)
-        self.vector[9] = abs(self.string - self.parent.string)
-        self.vector[10] = abs(self.finger - int(str(self.parent.finger).split(',')[-1]))    
+        if self.finger == 4: # penalize 4
+            self.vector[7] = 1
+        self.vector[8] = abs(self.position - self.parent.position)
+        self.vector[9] = abs(self.fret - self.parent.fret)
+        self.vector[10] = abs(self.string - self.parent.string) # same as 12?
+        self.vector[11] = abs(self.finger - int(str(self.parent.finger).split(',')[-1]))    
+        
+        if self.fromChord: # only for chords 
+            if self.parent.string == self.string: # not feasible
+                self.vector[12] = 1
+            if (self.fret == self.parent.fret) and (self.finger == self.parent.finger) and (self.finger == 1):
+                self.vector[14] = 1
+        if self.position < 2: # extra favor 1st pos
+            self.vector[13] = 1
         
         return sum(int(a)*int(b) for a,b in zip(self.rules,self.vector))    
             
@@ -244,6 +313,33 @@ class NoteNode(object):
     # check if two nodes contain the same pitch/octave info == are the same
     def equals(self, note):
         return ((note.pitch == self.pitch) and (note.octave == self.octave))
+
+    # ============================= ============================= #
+    # overrides 
+    def __lt__(self, other):
+        if isinstance(other, NoteNode):
+            return float(self.score) < float(other.score)
+        else:
+            return NotImplemented
+        
+    def __rt__(self, other):
+        if isinstance(other, NoteNode):
+            return float(self.score) > float(other.score)
+        else:
+            return NotImplemented
+        
+    def __le__(self, other):
+        if isinstance(other, NoteNode):
+            return float(self.score) <= float(other.score)
+        else:
+            return NotImplemented
+        
+    def __re__(self, other):
+        if isinstance(other, NoteNode):
+            return float(self.score) >= float(other.score)
+        else:
+            return NotImplemented 
+        
     # ============================= ============================= #
     # prints
     def getChildren(self):
@@ -260,11 +356,15 @@ class NoteNode(object):
 # ============================= ============================= ============================= #  
 class NoteTree(object):
     # ============================= ============================= #
-    def __init__(self, file, rules):
+    def __init__(self, file, rules, limit=5, reset=5, pr=True):
         self.options = options # imported
         self.rules = rules # imported in gui
+        self.limit = limit # width limitation
+        self.reset = reset # reset layer notes
         self.root = None # init
+        self.fingering_options = OrderedDict() # init
         self.best_path = [] # init
+        self.best_dict = OrderedDict() # try
         self.fingering_paths = set() # init
         self._fingering_paths = set() # init
         self.leafs = [] # init
@@ -272,6 +372,7 @@ class NoteTree(object):
         self.new_file = ''
         self.prints = ''
         self.file = ''
+        self.combs = '' # for the fret-string tablature combinations
 
         if self.validate(file):
             self.file = file
@@ -282,18 +383,19 @@ class NoteTree(object):
             self.fillPaths() # get all paths
             self.best() # compute best path
             self.writeFingers() # write new file
-        #print(self.prints)
+        if pr:
+            print(self.prints)
      
     # ============================= ============================= #
     # fills the options dict with all possible fingering combinations
     # NEEDS: option dictionary from Options.py 
     def fillOptions(self):
-        fingerings = dict()
+        fingerings = OrderedDict()
         fingers = [0,1,2,3,4]
         for option in options:
             pos_comb = options[option]
             add_comb = ''
-            # for every fre-string combination add a finger
+            # for every fret-string combination add a finger
             for comb in pos_comb.split(','):
                 add_finger = ''
                 for finger in fingers:
@@ -319,19 +421,20 @@ class NoteTree(object):
         notes = dom.getElementsByTagName("note")
         # rests don't have steps or alters, filter them out.
         notes = filter(lambda note: not self.is_rest(note), notes)
-        # for easiness filter out accidentals
-        #notes = filter(lambda note: not self.is_accidental(note), notes)
+        #notes = filter(lambda note: not self.is_accidental(note), notes) # non accidentals 
         # fill list with all notes
         for note in notes:
+            if note.parentNode.parentNode.getAttribute("id") != "P1":
+                break
             # alter '1' means sharp
             # alter '-1' means flat
             alter = self.get_alter(note)
-            pitch, octave, duration, x = self.get_step(note)
+            pitch, octave, voice, duration, x, y, measure = self.get_step(note)
             if alter == '1':
                 pitch = pitch + 's'
             if alter == '-1':
                 pitch = pitch + 'f'
-            new_note = Note(pitch, octave, duration, x)
+            new_note = Note(pitch, octave, voice, duration, x, y, measure)
             new_note.setFingers(self.fingering_options[new_note.me])
             note_list.append(new_note)
         print('Creating tree for {0} notes'.format(len(note_list)))
@@ -340,12 +443,13 @@ class NoteTree(object):
     
     # replace chords in note list
     def getChords(self):
+        note_list = list(self.allign())
         prevx = 0
         currx = 0
         chords = [] # the list of chords to return 
         #new_chord = Chord()
         chord_notes = [] # the notes
-        for note in self.note_list:
+        for note in note_list:
             currx = note.x
             if currx != prevx:
                 chords.append(Chord(chord_notes))
@@ -356,7 +460,11 @@ class NoteTree(object):
                 chord_notes.append(note)
         chords.append(Chord(chord_notes)) # last note
         return chords[1:]
-                 
+    
+    #fix voices note allignment
+    def allign(self):
+        return sorted(self.note_list)
+    
     # ============================= ============================= #
     # creates all possible fingering combinations
     def expand(self):
@@ -370,41 +478,54 @@ class NoteTree(object):
         stack = []
         stack.append(self.root)
         stack_dummy = [] # dummy stack
-        lim = 3 # set limit
+        lim = self.limit # set limit
         print('Child number limit set to: {0}'.format(lim))
         c = 0 # for limit
         msg = 0 # for printing
         i = 0 # for status bar
+        meas_change = False
+        meas_curr = self.chord_list[0].notes[0].measure
         for chord in self.chord_list: # start for all notes
+            if meas_curr != chord.notes[0].measure:
+                meas_curr = chord.notes[0].measure
+                meas_change = True
             while stack:
-                sc = [] # scores
+                #sc = [] # scores
                 stack_dummy = []
                 for child in stack: # start for all new added nodes
-                    c =0 
+                    c = 0 
                     #ch_finger = int(str(child.finger).split(',')[-1])
                     if len(chord.notes) == 1: # chord containing one note
                         note = chord.notes[0]
                         if len(note.fingers.split(','))>1:
                             for finger in note.fingers.split(','):
                                 node = NoteNode(note, self.rules, False, finger, child)
-                                if (c<=lim): # check the scores are -10
+                                if (c<lim): # check the scores are -lim
                                     stack_dummy.append(node)
-                                    sc.append(node.score)
+                                    stack_dummy = sorted(stack_dummy)
+                                    #sc.append(node.score)
                                     c += 1
-                                elif max(sc)>node.score: # replace max score
-                                    stack_dummy[sc.index(max(sc))].replaceNodeData(node)
-                                    sc[sc.index(max(sc))] = node.score
+                                elif stack_dummy[-1].score > node.score:
+                                    stack_dummy[-1].replaceNodeData(node)
+                                    stack_dummy = sorted(stack_dummy)
+                                #elif max(sc)>node.score: # replace max score
+                                    #stack_dummy[sc.index(max(sc))].replaceNodeData(node)
+                                    #sc[sc.index(max(sc))] = node.score
                                 else: 
                                     node.delete()
                         else:
                             node = NoteNode(note, self.rules, False, note.fingers, child)
-                            if (c<=lim):
+                            if (c<lim):
                                 stack_dummy.append(node)
-                                sc.append(node.score)
+                                stack_dummy = sorted(stack_dummy)
+                                #sc.append(node.score)
                                 c += 1
-                            elif max(sc)>node.score: # replace max score
-                                stack_dummy[sc.index(max(sc))].replaceNodeData(node)
-                                sc[sc.index(max(sc))] = node.score
+                            elif stack_dummy[-1].score > node.score:
+                                stack_dummy[-1].replaceNodeData(node)
+                                stack_dummy = sorted(stack_dummy)
+                            #elif max(sc)>node.score: # replace max score
+                                #stack_dummy[sc.index(max(sc))].replaceNodeData(node)
+                                #sc[sc.index(max(sc))] = node.score
                             else: 
                                 node.delete()
                     else: # actual chord with multiple notes
@@ -412,7 +533,7 @@ class NoteTree(object):
                         stack_dummy.append(node)
                         c += 1
                 stack = list(stack_dummy)
-                gc.collect()
+                #gc.collect()
                 break # out of while with stack containing the leafs to be expanded
             msg += 1
             i += 1 # printing bars and stuff
@@ -420,16 +541,18 @@ class NoteTree(object):
             sys.stdout.write("[{: <50}] {}%".format(u'\u2713'*int((50/len(self.chord_list))*i), int((100/len(self.chord_list))*i)))
             sys.stdout.flush()
             #sleep(0.25)
-            if msg%5==0: # status updates and limiting
+            if (msg%self.reset==0) or (meas_change==True): # status updates and limiting
+            #if meas_change==True:
+                meas_change = False
                 #print('Expanded {0} notes... paths: {1}'.format(msg, len(stack)))
-                self.prints = self.prints + 'Expanded {0} notes... paths: {1}'.format(msg, len(stack))
-                best = self.limit(stack)
+                self.prints = self.prints + '\nExpanded {0} notes... paths: {1}'.format(msg, len(stack))
+                best = self._limit(stack)
                 stack = list(best)
                 #print('Cutting down to... {0}'.format(len(stack)))
-                self.prints = self.prints + 'Cutting down to... {0}'.format(len(stack))
+                self.prints = self.prints + '\nCutting down to... {0}'.format(len(stack))
         self.leafs = list(stack)
         print('\nCreated tree with {0} leafs'.format(len(self.leafs)))
-        self.prints = self.prints + 'Created tree with {0} leafs'.format(len(self.leafs))
+        self.prints = self.prints + '\nCreated tree with {0} leafs'.format(len(self.leafs))
     
     # ============================= ============================= #
     # fill fingering_paths set with all possible fingering paths
@@ -462,7 +585,7 @@ class NoteTree(object):
         for node in self._fingering_paths:
             self.scores[node] = node[-1].score
     
-    def limit(self, stack):
+    def _limit(self, stack):
         # downsize stack list of nodes
         minv = stack[0].score
         i = 0
@@ -491,11 +614,14 @@ class NoteTree(object):
             s += ' '
             if len(str(node.finger).split(','))>1: # split chords fingers
                 #print(node.finger)
-                for finger in str(node.finger).split(','):
+                for finger, note in zip(str(node.finger).split(','),node.note):
                     self.best_path.append(int(finger))
+                    self.best_dict[note.xy] = int(finger)
             else:
+                self.best_dict[node.note.xy] = node.finger
                 self.best_path.append(node.finger)
         #print('Chosen path: {0} with score: {1}'.format(s[:-1], self.scores[best]))
+        self.combs = s[:-1]
         self.prints = self.prints + '\nChosen path: {0} \nwith score: {1}'.format(s[:-1], self.scores[best])
         
     # ============================= ============================= #
@@ -537,15 +663,49 @@ class NoteTree(object):
     def writeFingers(self):
         tree = ET.parse(self.file)
         root = tree.getroot()
-        p = 0
-        for child in root.iter('note'):
-            notations = ET.Element('notations')
-            technical = ET.SubElement(notations, 'technical') 
-            fingering = ET.SubElement(technical, 'fingering')
-            if child.find('rest')==None:
-                fingering.text = str(self.best_path[p])
-                child.append(notations)
-                p += 1
+        combs = self.combs.split()
+        p = 0 # count 
+        # part 1- guitar, not the tablature
+        for part in root.iter('part'):
+            for meas in part.iter('measure'):
+                measure = meas.get('number')
+                if part.get('id')=="P1":
+                    for child in meas.iter('note'):
+                        acc = ''
+                        # if it is not a rest, write fingering
+                        if child.find('rest')==None:
+                            if child.find('pitch/alter')!=None:
+                                if child.find('pitch/alter').text == '1':
+                                    acc = 's'
+                                elif child.find('pitch/alter').text == '-1':
+                                    acc = 'f'
+                            pitch = child.find('pitch/step').text
+                            pitch = pitch+acc
+                            octave = child.find('pitch/octave').text
+                            voice = child.find('voice').text
+                            x = child.get('default-x')
+                            y = child.get('default-y')
+                            if child.find('duration'):
+                                n = Note(pitch, octave, voice, child.find('duration').text, x, y, measure) #(pitch,octave,voice,duration,x,y,measure)
+                            else:
+                                n = Note(pitch, octave, voice, '0', x, y, measure)
+                            # new element nodes
+                            notations = ET.Element('notations')
+                            technical = ET.SubElement(notations, 'technical') 
+                            fingering = ET.SubElement(technical, 'fingering')
+                            #fingering.text = str(self.best_path[p]) # old pathing
+                            fingering.text = str(self.best_dict[n.xy])
+                            child.append(notations)
+                # write tablature
+                # not working - index out of range
+                elif part.get('id')=="P2":
+                    for child in meas.iter('note'):
+                        if child.find('notations/technical/string')!=None:
+                            string = combs[p].split(',')[0][1:] 
+                            fret = combs[p].split(',')[1][:-1]
+                            child.find('notations/technical/string').text = string
+                            child.find('notations/technical/fret').text = fret
+                            p += 1
         self.new_file = str('New_{0}'.format(self.file))
         tree.write(self.new_file)
         print('New file writing complete')
@@ -555,13 +715,15 @@ class NoteTree(object):
     def get_step(self, note):
         stepNode = note.getElementsByTagName("step")[0]
         octave = note.getElementsByTagName("octave")[0]
-        duration = note.getElementsByTagName("duration")
+        voice = note.getElementsByTagName("voice")[0]
         x = note.getAttribute("default-x")
+        y = note.getAttribute("default-y")
+        measure = note.parentNode.getAttribute("number")
         if note.getElementsByTagName("duration"):
             duration = note.getElementsByTagName("duration")[0]
-            return str(stepNode.childNodes[0].nodeValue), str(octave.childNodes[0].nodeValue), str(duration.childNodes[0].nodeValue), x
+            return str(stepNode.childNodes[0].nodeValue), str(octave.childNodes[0].nodeValue), str(voice.childNodes[0].nodeValue), str(duration.childNodes[0].nodeValue), x, y, measure
         else:
-            return str(stepNode.childNodes[0].nodeValue), str(octave.childNodes[0].nodeValue), '0', x
+            return str(stepNode.childNodes[0].nodeValue), str(octave.childNodes[0].nodeValue), str(voice.childNodes[0].nodeValue), '0', x, y, measure
 
     def get_alter(self, note):
         alters = note.getElementsByTagName("alter")
@@ -576,7 +738,7 @@ class NoteTree(object):
         return self.get_alter(note) != None
 
 # ============================= ============================= ============================= #
-# ============================= ============================= ============================= #
+# ============================= ============================= ============================= #  
 
 from tkinter import *
 from tkinter import messagebox
@@ -604,7 +766,8 @@ class GUI():
         
         # string variables
         self.file = StringVar()
-        self.file.set("sTest.xml")
+        self.file.set("Type your MusicXML file")
+        #self.file.set("sTest.xml")
         self.choice = StringVar()
         self.created = StringVar()
         self.prints = StringVar()
@@ -629,13 +792,16 @@ class GUI():
         self.ruleset = Button(self.frame, text="CUSTOMIZE RULES", fg="brown", font='Helvetica 10 bold', command=self.setrules)
         self.ruleset.pack(ipady=3)
         
+        self.confset = Button(self.frame, text="CHANGE CONFIGURATION", fg="brown", font='Helvetica 10 bold', command=self.setconf)
+        self.confset.pack(ipady=3)
+        
         # create Tree button
         self.create = Button(self.frame, text="COMPUTE FINGERINGS", fg="brown", font='Helvetica 10 bold', command=self.createTree)
         self.create.pack(ipady=3)           
         
         # prints display message
-        self.res_msg = Message(self.frame, textvariable=self.prints, font='Helvetica 10', justify='center', width=560)
-        self.res_msg.pack(ipady=3) 
+        #self.res_msg = Message(self.frame, textvariable=self.prints, font='Helvetica 10', justify='center', width=560)
+        #self.res_msg.pack(ipady=3) 
         
         # created message entry
         self.val = Entry(self.frame, textvariable=self.created, font='Helvetica 10', justify='center', width=40)
@@ -673,6 +839,20 @@ class GUI():
         
         q = Button(f, text="CLOSE", fg="brown", font='Helvetica 10 bold', command=t.destroy)
         q.pack(ipady=3)        
+        
+    def setconf(self):
+        t = Toplevel(self.master)
+        t.wm_title('Change Configuration')
+        t.geometry('250x230')
+        t.resizable(width=False, height=False)
+        swin = ScrolledWindow(t, scrollbar=Y, width=250 , height=230)
+        swin.pack()
+        win = swin.window
+        f = Frame(win, bg='light blue', relief=SUNKEN)
+        f.pack(fill = BOTH, expand = True, padx = 5, pady = 5)
+        
+        q = Button(f, text="CLOSE", fg="brown", font='Helvetica 10 bold', command=t.destroy)
+        q.pack(ipady=3)  
         
     def setrules(self):
         t = Toplevel(self.master)
@@ -832,8 +1012,8 @@ class GUI():
         else:
             self.created.set('Please enter a valid MusicXML file.')
 
-root = Tk()
-root.resizable(width=False, height=False)
-gui = GUI(root)
-root.mainloop() #runs until quit or closed
-root.destroy() #cannot invoke, application is destroyed
+#root = Tk()
+#root.resizable(width=False, height=False)
+#gui = GUI(root)
+#root.mainloop() #runs until quit or closed
+#root.destroy() #cannot invoke, application is destroyed
