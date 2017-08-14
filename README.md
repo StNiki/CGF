@@ -5,8 +5,9 @@
 To compute the fingerings for a music file in MusicXML the user can either run the GUI.sh or the CGF.sh script. 
 
 Important Note: The code is compatible with python 3.5
+!! The GUI class needs update to the latest rule set.
 
-How to use the shell script
+How to use the shell scripts
 
 Running the CFG shell script will open a window requesting an input filename by the user, which will then run the program using the default configuration. The output will be created as "New_[filename].xml".
 
