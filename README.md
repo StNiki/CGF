@@ -21,13 +21,13 @@ Running the CFG script will open a window requesting an input filename by the us
 
 Alternatively, the CFG shell script can be run on a console with the following options:
 
--n: input filename
+**-n**: input filename
 
--w: width limit parameter
+**-w**: width limit parameter
 
--l: layer reset parameter
+**-l**: layer reset parameter
 
--p: print on the console the computed results
+**-p**: print on the console the computed results
 
 If the w, l, p options are omitted the program will use the default configuration (5, 5, False). In the name is omitted or the file is incorrect, the program will request a valid input file.
 
