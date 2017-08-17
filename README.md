@@ -13,13 +13,12 @@ _Still known issues with writing tabs. Working on it._
 > To compute the fingerings for a music file in MusicXML the user can either run the runGUI.py or the runCGF.py script. 
 The GUI class needs to be updated to the latest rules in order to work properly.
 
-#### Important Note: Compatible with python 3.5
+#### Important Note: C
+ompatible with python 3.5
 
 ### How to use the run scripts:
 
-Running the CFG script will open a window requesting an input filename by the user, which will then run the program using the default configuration. The output will be created as "New_[filename].xml".
-
-Alternatively, the CFG shell script can be run on a console with the following options:
+The CFG shell script can be run on a console with the following options:
 
 **-n**: input filename
 
@@ -30,6 +29,7 @@ Alternatively, the CFG shell script can be run on a console with the following o
 **-p**: print on the console the computed results
 
 If the w, l, p options are omitted the program will use the default configuration (5, 5, False). In the name is omitted or the file is incorrect, the program will request a valid input file.
+The output will be created as "New_[filename].xml".
 
 ### How to use the graphic interface:
 
